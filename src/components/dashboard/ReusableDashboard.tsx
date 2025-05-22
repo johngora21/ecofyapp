@@ -1,9 +1,8 @@
+
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-import { formatCurrency, formatDate, formatPercent } from '@/utils/crm-operations';
 import { CircleCheckBig, TrendingDown, TrendingUp } from 'lucide-react';
 
 interface KpiCardProps {
@@ -30,14 +29,14 @@ export const KpiCard: React.FC<KpiCardProps> = ({
       return (
         <div className="flex items-center text-sm text-green-600">
           <TrendingUp className="mr-1 h-4 w-4" />
-          <span>+{formatPercent(change)}</span>
+          <span>+{change.toFixed(1)}%</span>
         </div>
       );
     } else if (change < 0) {
       return (
         <div className="flex items-center text-sm text-red-600">
           <TrendingDown className="mr-1 h-4 w-4" />
-          <span>{formatPercent(change)}</span>
+          <span>{change.toFixed(1)}%</span>
         </div>
       );
     } else {
