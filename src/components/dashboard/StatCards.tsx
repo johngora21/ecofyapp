@@ -1,7 +1,7 @@
-
 import React from 'react';
 import { TrendingUp, AlertTriangle } from 'lucide-react';
 import { EditableField } from '../ui/editable-field';
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '../ui/select';
 
 interface StatCardsProps {
   monthlyRevenue: number;
@@ -17,6 +17,9 @@ interface StatCardsProps {
   handleParcelsCountChange: (value: string | number) => void;
   handleYieldChange: (value: string | number) => void;
   handleYieldGrowthChange: (value: string | number) => void;
+  selectedProduct: string;
+  setSelectedProduct: (value: string) => void;
+  productOptions: { value: string; label: string }[];
 }
 
 const StatCards: React.FC<StatCardsProps> = ({
@@ -32,7 +35,10 @@ const StatCards: React.FC<StatCardsProps> = ({
   handleAreaChange,
   handleParcelsCountChange,
   handleYieldChange,
-  handleYieldGrowthChange
+  handleYieldGrowthChange,
+  selectedProduct,
+  setSelectedProduct,
+  productOptions
 }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6">

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { 
   BarChart, 
@@ -347,6 +346,18 @@ const GuadeloupeRainfallTracking = () => {
     'Les Saintes': '#9C27B0'
   };
   
+  // Add custom FilterIcon component:
+  const FilterIcon = (props: React.SVGProps<SVGSVGElement>) => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+      <line x1="4" y1="6" x2="20" y2="6" />
+      <circle cx="14" cy="6" r="2" />
+      <line x1="4" y1="12" x2="20" y2="12" />
+      <circle cx="8" cy="12" r="2" />
+      <line x1="4" y1="18" x2="20" y2="18" />
+      <circle cx="17" cy="18" r="2" />
+    </svg>
+  );
+  
   return (
     <div className="space-y-6">
       <div className="bg-white rounded-xl border p-6">
@@ -409,7 +420,7 @@ const GuadeloupeRainfallTracking = () => {
               placeholder="Rechercher..."
               className="pl-10"
             />
-            <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <FilterIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           </div>
           
           <Select value={filterYear} onValueChange={setFilterYear}>

@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Search, MapPin, ShoppingCart } from "lucide-react";
 import { useLanguage } from "../../contexts/LanguageContext";
@@ -110,7 +109,7 @@ const CategoryProducts: React.FC<CategoryProductsProps> = ({ category }) => {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-        <div className="grid grid-cols-3 gap-4 w-full md:w-auto">
+        <div className="grid grid-cols-2 gap-4 w-full md:w-auto">
           <Select value={selectedProduct} onValueChange={setSelectedProduct}>
             <SelectTrigger>
               <SelectValue placeholder="Product" />
@@ -150,7 +149,7 @@ const CategoryProducts: React.FC<CategoryProductsProps> = ({ category }) => {
         </div>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {filteredProducts.map((product) => (
           <Card key={product.id} className="overflow-hidden hover:shadow-md transition-shadow">
             <div className="aspect-square relative overflow-hidden">

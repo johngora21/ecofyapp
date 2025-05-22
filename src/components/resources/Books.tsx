@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Search, Book, BookOpen } from "lucide-react";
 import { useLanguage } from "../../contexts/LanguageContext";
@@ -91,28 +90,44 @@ const Books: React.FC = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row gap-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-          <Input
+        <div className="relative w-full max-w-md mx-auto md:mx-0">
+          <input
+            type="text"
             placeholder={translations.search}
-            className="pl-10"
+            className="pl-12 w-full h-12 rounded-md border border-input bg-background text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            style={{ lineHeight: '1.5', minHeight: '3rem' }}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
+          <svg
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 h-6 w-6 pointer-events-none"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+            viewBox="0 0 24 24"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
         </div>
-        <div className="w-full md:w-64">
-          <Select value={selectedProduct} onValueChange={setSelectedProduct}>
-            <SelectTrigger>
-              <SelectValue placeholder="Filter by product" />
-            </SelectTrigger>
-            <SelectContent>
-              {productOptions.map((option) => (
-                <SelectItem key={option.value} value={option.value}>
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 mb-4 md:mb-6 w-full md:w-auto">
+          <div>
+            <label className="text-sm font-medium text-gray-700 mb-1 block">
+              Product
+            </label>
+            <Select value={selectedProduct} onValueChange={setSelectedProduct}>
+              <SelectTrigger className="h-9 md:h-10">
+                <SelectValue placeholder="Filter by product" />
+              </SelectTrigger>
+              <SelectContent>
+                {productOptions.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </div>
       

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import PageLayout from '../components/layout/PageLayout';
 import Dashboard from '../components/Dashboard';
@@ -7,11 +6,22 @@ import GuadeloupeHarvestTracking from '../components/GuadeloupeHarvestTracking';
 import GuadeloupeWeatherAlerts from '../components/GuadeloupeWeatherAlerts';
 import TaskList from '../components/cultures/TaskList';
 import { Button } from '@/components/ui/button';
-import { PlusCircle, Download, Filter, RefreshCw, Upload, Printer } from 'lucide-react';
+import { PlusCircle, Download, RefreshCw, Upload, Printer } from 'lucide-react';
 import { StatisticsProvider } from '../contexts/StatisticsContext';
 import { useCRM } from '../contexts/CRMContext';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
+
+const FilterIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <line x1="4" y1="6" x2="20" y2="6" />
+    <circle cx="14" cy="6" r="2" />
+    <line x1="4" y1="12" x2="20" y2="12" />
+    <circle cx="8" cy="12" r="2" />
+    <line x1="4" y1="18" x2="20" y2="18" />
+    <circle cx="17" cy="18" r="2" />
+  </svg>
+);
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState<string>('dashboard');
@@ -105,8 +115,7 @@ const Index = () => {
               variant="outline" 
               className="flex items-center gap-2 bg-white border-gray-200 hover:bg-gray-50"
             >
-              <Filter className="h-4 w-4 text-gray-600" />
-              Configurer
+              <FilterIcon className="h-4 w-4 text-gray-600" />
             </Button>
           </div>
         );

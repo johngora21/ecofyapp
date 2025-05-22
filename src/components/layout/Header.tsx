@@ -1,25 +1,30 @@
-
 import React from "react";
-import { Bell, Menu, User, Globe } from "lucide-react";
+import { Menu, Bell, ShoppingCart, Globe } from "lucide-react";
+import { Button } from "../ui/button";
 import { useLanguage } from "../../contexts/LanguageContext";
 import { useUser } from "../../contexts/UserContext";
-import { 
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger 
-} from "../ui/dropdown-menu";
-import { Button } from "../ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Link } from "react-router-dom";
+import { useNotifications } from "../../hooks/use-notifications";
+import { Badge } from "../ui/badge";
+import { Popover, PopoverTrigger, PopoverContent } from "../ui/popover";
 
 interface HeaderProps {
   sidebarOpen: boolean;
   setSidebarOpen: (open: boolean) => void;
 }
 
+const currencyOptions = [
+  { value: "TZS", label: "Tanzanian Shilling (TZS)" },
+  { value: "KES", label: "Kenyan Shilling (KES)" },
+  { value: "USD", label: "US Dollar (USD)" },
+];
+
 const Header: React.FC<HeaderProps> = ({ sidebarOpen, setSidebarOpen }) => {
   const { language, setLanguage, translations } = useLanguage();
   const { user } = useUser();
+  const { unreadCount } = useNotifications();
+  const [currency, setCurrency] = React.useState("TZS");
+  const [popoverOpen, setPopoverOpen] = React.useState(false);
 
   return (
     <header className="sticky top-0 z-30 flex h-16 bg-white shadow-sm">
@@ -38,46 +43,59 @@ const Header: React.FC<HeaderProps> = ({ sidebarOpen, setSidebarOpen }) => {
           <h1 className="text-xl font-bold text-shamba-green">EcofyApp</h1>
         </div>
         <div className="flex items-center gap-4">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+          <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
+            <PopoverTrigger asChild>
               <Button variant="ghost" size="icon">
-                <Globe className="h-5 w-5" />
-                <span className="sr-only">Language</span>
+                <Globe className="h-6 w-6" />
+                <span className="sr-only">Language & Currency</span>
               </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => setLanguage('en')} className={language === 'en' ? 'bg-shamba-green/10' : ''}>
-                English
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setLanguage('sw')} className={language === 'sw' ? 'bg-shamba-green/10' : ''}>
-                Kiswahili
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          
-          <Button variant="ghost" size="icon">
-            <Bell className="h-5 w-5" />
-            <span className="sr-only">Notifications</span>
+            </PopoverTrigger>
+            <PopoverContent align="end" className="w-56 p-4">
+              <div className="mb-3">
+                <label className="block text-xs font-medium text-gray-700 mb-1">Language</label>
+                <select
+                  className="w-full border rounded px-2 py-1 text-sm"
+                  value={language}
+                  onChange={e => setLanguage(e.target.value)}
+                >
+                  <option value="en">English</option>
+                  <option value="sw">Swahili</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-700 mb-1">Currency</label>
+                <select
+                  className="w-full border rounded px-2 py-1 text-sm"
+                  value={currency}
+                  onChange={e => setCurrency(e.target.value)}
+                >
+                  {currencyOptions.map(opt => (
+                    <option key={opt.value} value={opt.value}>{opt.label}</option>
+                  ))}
+                </select>
+              </div>
+            </PopoverContent>
+          </Popover>
+          <Button variant="ghost" size="icon" asChild>
+            <Link to="/notifications" className="relative">
+              <Bell className="h-6 w-6" />
+              {unreadCount > 0 && (
+                <Badge 
+                  className="absolute -top-1 -right-1 px-1 min-w-[18px] h-[18px] flex items-center justify-center text-[10px]"
+                  variant="destructive"
+                >
+                  {unreadCount}
+                </Badge>
+              )}
+              <span className="sr-only">Notifications</span>
+            </Link>
           </Button>
-          
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="flex items-center gap-2" size="sm">
-                <Avatar className="h-8 w-8">
-                  <AvatarImage src={user?.avatar} alt={user?.name} />
-                  <AvatarFallback className="bg-shamba-green text-white">
-                    {user?.name?.charAt(0) || 'U'}
-                  </AvatarFallback>
-                </Avatar>
-                <span className="hidden md:inline-block">{user?.name || translations.anonymous}</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem>{translations.profile}</DropdownMenuItem>
-              <DropdownMenuItem>{translations.settings}</DropdownMenuItem>
-              <DropdownMenuItem>{translations.logout}</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <Button variant="ghost" size="icon" asChild>
+            <Link to="/cart">
+              <ShoppingCart className="h-6 w-6" />
+              <span className="sr-only">Cart</span>
+            </Link>
+          </Button>
         </div>
       </div>
     </header>

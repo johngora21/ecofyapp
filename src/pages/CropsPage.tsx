@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import PageLayout from '../components/layout/PageLayout';
 import GuadeloupeHarvestTracking from '../components/GuadeloupeHarvestTracking';
@@ -6,7 +5,7 @@ import GuadeloupeSpecificCrops from '../components/GuadeloupeSpecificCrops';
 import CropPlanning from '../components/CropPlanning';
 import TabContainer, { TabItem } from '../components/layout/TabContainer';
 import { Button } from '@/components/ui/button';
-import { Download, Plus, Upload, Filter, RefreshCw, CalendarRange, Eye, Printer } from 'lucide-react';
+import { Download, Plus, Upload, RefreshCw, CalendarRange, Eye, Printer } from 'lucide-react';
 import { StatisticsProvider } from '../contexts/StatisticsContext';
 import { CRMProvider } from '../contexts/CRMContext';
 import { motion } from 'framer-motion';
@@ -18,6 +17,17 @@ import {
 } from "@/components/ui/dropdown-menu";
 import PreviewPrintButton from '@/components/common/PreviewPrintButton';
 import { useCRM } from '@/contexts/CRMContext';
+
+const FilterIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <line x1="4" y1="6" x2="20" y2="6" />
+    <circle cx="14" cy="6" r="2" />
+    <line x1="4" y1="12" x2="20" y2="12" />
+    <circle cx="8" cy="12" r="2" />
+    <line x1="4" y1="18" x2="20" y2="18" />
+    <circle cx="17" cy="18" r="2" />
+  </svg>
+);
 
 const CropsPage = () => {
   const [activeTab, setActiveTab] = useState<string>('harvest');
@@ -109,7 +119,7 @@ const CropsPage = () => {
                 console.log("Filtres appliqués aux données de récolte");
               }}
             >
-              <Filter className="h-4 w-4" />
+              <FilterIcon className="h-4 w-4" />
               Filtrer
             </Button>
           </div>

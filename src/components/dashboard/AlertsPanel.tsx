@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { AlertTriangle, Trash2, Edit, X, Check, Plus } from 'lucide-react';
 import { toast } from 'sonner';
@@ -125,20 +124,22 @@ const AlertsPanel: React.FC<AlertsPanelProps> = ({ alerts, setAlerts, setAlertsC
             <DialogTitle>Ajouter une alerte</DialogTitle>
           </DialogHeader>
           <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="alertType" className="text-right">
-                Type
-              </Label>
-              <select
-                id="alertType"
-                value={newAlertType}
-                onChange={(e) => setNewAlertType(e.target.value)}
-                className="col-span-3 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-              >
-                <option value="info">Information</option>
-                <option value="warning">Avertissement</option>
-                <option value="danger">Danger</option>
-              </select>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 mb-4 md:mb-6">
+              <div>
+                <label className="text-sm font-medium text-gray-700 mb-1 block">
+                  Alert Type
+                </label>
+                <select
+                  id="alertType"
+                  value={newAlertType}
+                  onChange={(e) => setNewAlertType(e.target.value)}
+                  className="col-span-3 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                >
+                  <option value="info">Information</option>
+                  <option value="warning">Avertissement</option>
+                  <option value="danger">Danger</option>
+                </select>
+              </div>
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="message" className="text-right">

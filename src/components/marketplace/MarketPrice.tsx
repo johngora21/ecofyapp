@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useLanguage } from "../../contexts/LanguageContext";
 import { useUser } from "../../contexts/UserContext";
@@ -29,12 +28,22 @@ import {
   Calendar, 
   ArrowUpRight, 
   PieChart as PieChartIcon,
-  Filter, 
   Search,
   RefreshCw,
   ChevronDown
 } from "lucide-react";
 import { ResponsiveLineChart, ResponsiveBarChart, ResponsivePieChart } from "../ui/responsive-chart";
+
+const FilterIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <line x1="4" y1="6" x2="20" y2="6" />
+    <circle cx="14" cy="6" r="2" />
+    <line x1="4" y1="12" x2="20" y2="12" />
+    <circle cx="8" cy="12" r="2" />
+    <line x1="4" y1="18" x2="20" y2="18" />
+    <circle cx="17" cy="18" r="2" />
+  </svg>
+);
 
 const MarketPrice: React.FC = () => {
   const { translations } = useLanguage();
@@ -212,7 +221,7 @@ const MarketPrice: React.FC = () => {
         </Button>
         
         {filtersOpen && (
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-2 md:gap-4 mb-4 md:mb-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 mb-4 md:mb-6">
             <div>
               <label className="text-sm font-medium text-gray-700 mb-1 block">
                 Location
@@ -316,7 +325,7 @@ const MarketPrice: React.FC = () => {
                 />
               </div>
               <Button variant="outline" size="icon" onClick={() => setSearchTerm("")} className="h-9 md:h-10 w-9 md:w-10 flex-shrink-0">
-                <Filter className="h-4 w-4" />
+                <FilterIcon className="h-4 w-4" />
               </Button>
             </div>
             
@@ -379,7 +388,7 @@ const MarketPrice: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
               <Card className="col-span-1 md:col-span-2">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-shamba-green flex items-center justify-between text-base md:text-lg">
+                  <CardTitle className="text-shamba-green flex flex-col md:flex-row md:items-center md:justify-between text-base md:text-lg gap-2 md:gap-0">
                     <span className="truncate">
                       {productOptions.find(option => option.value === selectedProduct)?.label} Prices - {locationOptions.find(option => option.value === selectedLocation)?.label}
                     </span>
@@ -397,72 +406,67 @@ const MarketPrice: React.FC = () => {
                 <CardContent>
                   <ResponsiveLineChart 
                     data={cropPriceData} 
-                    height={isMobile ? 200 : 280}
+                    height={isMobile ? 180 : 280}
                   />
-                  <div className="mt-3 md:mt-4 p-2 md:p-4 bg-shamba-green/5 rounded-lg border border-shamba-green/10">
-                    <h3 className="font-medium text-shamba-green mb-1 md:mb-2 text-sm md:text-base">AI Price Forecast</h3>
-                    <p className={`${isMobile ? 'text-xs' : 'text-sm'} text-gray-700`}>
+                  <div className="mt-2 md:mt-4 p-2 md:p-4 bg-shamba-green/5 rounded-lg border border-shamba-green/10">
+                    <h3 className="font-medium text-shamba-green mb-1 md:mb-2 text-xs md:text-base">AI Price Forecast</h3>
+                    <p className="text-xs md:text-sm text-gray-700">
                       Based on historical trends and current market conditions, prices for {productOptions.find(option => option.value === selectedProduct)?.label} in {locationOptions.find(option => option.value === selectedLocation)?.label} are expected to increase by approximately 10% in the next three months. Consider timing your market activities accordingly.
                     </p>
                   </div>
                 </CardContent>
               </Card>
-              
-              <div className="space-y-3 md:space-y-4">
-                <Card>
-                  <CardHeader className="pb-1 md:pb-2">
-                    <CardTitle className="text-xs md:text-sm">Price Statistics</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <dl className="space-y-1 md:space-y-2">
-                      <div className="flex justify-between">
-                        <dt className="text-xs md:text-sm font-medium text-muted-foreground">Current Price</dt>
-                        <dd className="text-xs md:text-sm font-semibold">1,350 TZS/{selectedUnit}</dd>
-                      </div>
-                      <div className="flex justify-between">
-                        <dt className="text-xs md:text-sm font-medium text-muted-foreground">Average (3m)</dt>
-                        <dd className="text-xs md:text-sm font-semibold">1,425 TZS/{selectedUnit}</dd>
-                      </div>
-                      <div className="flex justify-between">
-                        <dt className="text-xs md:text-sm font-medium text-muted-foreground">Highest (3m)</dt>
-                        <dd className="text-xs md:text-sm font-semibold">1,600 TZS/{selectedUnit}</dd>
-                      </div>
-                      <div className="flex justify-between">
-                        <dt className="text-xs md:text-sm font-medium text-muted-foreground">Lowest (3m)</dt>
-                        <dd className="text-xs md:text-sm font-semibold">1,150 TZS/{selectedUnit}</dd>
-                      </div>
-                      <div className="flex justify-between">
-                        <dt className="text-xs md:text-sm font-medium text-muted-foreground">Volatility</dt>
-                        <dd className="text-xs md:text-sm font-semibold">Medium</dd>
-                      </div>
-                    </dl>
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardHeader className="pb-1 md:pb-2">
-                    <CardTitle className="text-xs md:text-sm">Price Distribution</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <ResponsivePieChart 
-                      data={priceDistributionData} 
-                      height={isMobile ? 120 : 140} 
-                    />
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardHeader className="pb-1 md:pb-2">
-                    <CardTitle className="text-xs md:text-sm">Seasonality</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <ResponsiveBarChart 
-                      data={seasonalityData}
-                      height={isMobile ? 120 : 140}
-                    />
-                  </CardContent>
-                </Card>
-              </div>
+              <Card className="w-full">
+                <CardHeader className="pb-1 md:pb-2">
+                  <CardTitle className="text-xs md:text-sm">Price Statistics</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <dl className="space-y-1 md:space-y-2">
+                    <div className="flex justify-between">
+                      <dt className="text-xs md:text-sm font-medium text-muted-foreground">Current Price</dt>
+                      <dd className="text-xs md:text-sm font-semibold">1,350 TZS/{selectedUnit}</dd>
+                    </div>
+                    <div className="flex justify-between">
+                      <dt className="text-xs md:text-sm font-medium text-muted-foreground">Average (3m)</dt>
+                      <dd className="text-xs md:text-sm font-semibold">1,425 TZS/{selectedUnit}</dd>
+                    </div>
+                    <div className="flex justify-between">
+                      <dt className="text-xs md:text-sm font-medium text-muted-foreground">Highest (3m)</dt>
+                      <dd className="text-xs md:text-sm font-semibold">1,600 TZS/{selectedUnit}</dd>
+                    </div>
+                    <div className="flex justify-between">
+                      <dt className="text-xs md:text-sm font-medium text-muted-foreground">Lowest (3m)</dt>
+                      <dd className="text-xs md:text-sm font-semibold">1,150 TZS/{selectedUnit}</dd>
+                    </div>
+                    <div className="flex justify-between">
+                      <dt className="text-xs md:text-sm font-medium text-muted-foreground">Volatility</dt>
+                      <dd className="text-xs md:text-sm font-semibold">Medium</dd>
+                    </div>
+                  </dl>
+                </CardContent>
+              </Card>
+              <Card className="w-full">
+                <CardHeader className="pb-1 md:pb-2">
+                  <CardTitle className="text-xs md:text-sm">Price Distribution</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ResponsivePieChart 
+                    data={priceDistributionData} 
+                    height={isMobile ? 100 : 140} 
+                  />
+                </CardContent>
+              </Card>
+              <Card className="w-full">
+                <CardHeader className="pb-1 md:pb-2">
+                  <CardTitle className="text-xs md:text-sm">Seasonality</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ResponsiveBarChart 
+                    data={seasonalityData}
+                    height={isMobile ? 100 : 140}
+                  />
+                </CardContent>
+              </Card>
             </div>
           </TabsContent>
           
