@@ -3,6 +3,7 @@ import React from "react";
 import { Routes, Route, NavLink, useLocation } from "react-router-dom";
 import { useLanguage } from "../contexts/LanguageContext";
 import { Tabs, TabsList, TabsTrigger } from "../components/ui/tabs";
+import { useIsMobile } from "@/hooks/use-mobile";
 import MarketPrice from "../components/marketplace/MarketPrice";
 import AllProducts from "../components/marketplace/AllProducts";
 import CategoryProducts from "../components/marketplace/CategoryProducts";
@@ -10,6 +11,7 @@ import CategoryProducts from "../components/marketplace/CategoryProducts";
 const Marketplace: React.FC = () => {
   const { translations } = useLanguage();
   const location = useLocation();
+  const isMobile = useIsMobile();
   const currentPath = location.pathname.split('/').pop() || 'all';
   
   const categories = [
@@ -31,15 +33,15 @@ const Marketplace: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-800 mb-6">{translations.marketplace}</h1>
+        <h1 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-6">{translations.marketplace}</h1>
         
         <Tabs value={getTabValue()} className="w-full">
-          <TabsList className="grid grid-cols-3 md:grid-cols-9 mb-6">
+          <TabsList className={`${isMobile ? 'grid grid-cols-3 gap-1' : 'grid grid-cols-3 md:grid-cols-9'} mb-4 md:mb-6 overflow-x-auto`}>
             {categories.map((category) => (
               <TabsTrigger key={category.value} value={category.value} asChild>
-                <NavLink to={`/marketplace/${category.path}`} className="w-full">
+                <NavLink to={`/marketplace/${category.path}`} className="w-full text-sm md:text-base px-2 md:px-4 whitespace-nowrap">
                   {category.label}
                 </NavLink>
               </TabsTrigger>
