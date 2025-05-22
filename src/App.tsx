@@ -1,87 +1,47 @@
 
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import Index from "./pages/Index";
-import ParcelsPage from "./pages/ParcelsPage";
-import ParcelsDetailsPage from "./pages/ParcelsDetailsPage";
-import CropsPage from "./pages/CropsPage";
-import InventoryPage from "./pages/InventoryPage";
-import FinancePage from "./pages/FinancePage";
-import StatsPage from "./pages/StatsPage";
+import { Toaster } from "sonner";
+import Layout from "./components/layout/Layout";
+import Dashboard from "./pages/Dashboard";
+import MyFarms from "./pages/MyFarms";
+import Resources from "./pages/Resources";
+import Marketplace from "./pages/Marketplace";
 import NotFound from "./pages/NotFound";
-import { useEffect } from "react";
-import { CRMProvider } from "./contexts/CRMContext";
-import { StatisticsProvider } from "./contexts/StatisticsContext";
-import { AppSettingsProvider } from "./contexts/AppSettingsContext";
-import { trackPageView } from "./utils/analytics";
+import { LanguageProvider } from "./contexts/LanguageContext";
+import { UserProvider } from "./contexts/UserContext";
 
-// Define routes configuration with redirects
-const routes = [
-  { path: "/", element: <Index /> },
-  { path: "/parcelles", element: <ParcelsPage /> },
-  { path: "/parcelles/:id", element: <ParcelsDetailsPage /> },
-  { path: "/cultures", element: <CropsPage /> },
-  { path: "/inventaire", element: <InventoryPage /> },
-  { path: "/finances", element: <FinancePage /> },
-  { path: "/statistiques", element: <StatisticsProvider><StatsPage /></StatisticsProvider> },
-  { path: "/rapports", element: <Navigate to="/statistiques" replace /> },
-  { path: "/parametres", element: <Navigate to="/" replace /> },
-  { path: "/dashboard", element: <Navigate to="/" replace /> },
-  { path: "*", element: <NotFound /> }
-];
-
-// Create query client with enhanced configuration
+// Create a client
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false,
-      retry: 1,
       staleTime: 5 * 60 * 1000, // 5 minutes
-      gcTime: 10 * 60 * 1000, // 10 minutes
     },
   },
 });
 
-// Router change handler component
-const RouterChangeHandler = () => {
-  useEffect(() => {
-    // Scroll to top on route change
-    window.scrollTo(0, 0);
-    
-    // Track page view for analytics
-    const currentPath = window.location.pathname;
-    const pageName = currentPath === '/' ? 'dashboard' : currentPath.replace(/^\//, '');
-    trackPageView(pageName);
-  }, [location.pathname]);
-  
-  return null;
-};
-
-// Application main component with properly nested providers
-const App = () => {
+function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <AppSettingsProvider>
-        <CRMProvider>
-          <BrowserRouter>
-            <TooltipProvider>
-              <RouterChangeHandler />
-              <Routes>
-                {routes.map((route) => (
-                  <Route 
-                    key={route.path} 
-                    path={route.path} 
-                    element={route.element} 
-                  />
-                ))}
-              </Routes>
-            </TooltipProvider>
-          </BrowserRouter>
-        </CRMProvider>
-      </AppSettingsProvider>
+      <LanguageProvider>
+        <UserProvider>
+          <Router>
+            <Toaster position="top-right" />
+            <Routes>
+              <Route path="/" element={<Layout />}>
+                <Route index element={<Dashboard />} />
+                <Route path="my-farms" element={<MyFarms />} />
+                <Route path="resources/*" element={<Resources />} />
+                <Route path="marketplace/*" element={<Marketplace />} />
+                <Route path="*" element={<NotFound />} />
+              </Route>
+            </Routes>
+          </Router>
+        </UserProvider>
+      </LanguageProvider>
     </QueryClientProvider>
   );
-};
+}
 
 export default App;
